@@ -16,33 +16,6 @@ import java.util.UUID;
 public class MenuController {
     private final MenuService menuService;
 
-    @PostMapping
-    public ResponseEntity<MenuDto> createMenu(@Valid @RequestBody MenuDto menuDto) {
-        System.out.println("Creating Menu Item, menuDto: " + menuDto);
-        //----> Create a new menu.
-        var response = menuService.createMenu(menuDto);
-
-        //----> Send back the response.
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteMenu(@PathVariable(name = "id") UUID id) {
-        System.out.println("Deleting Menu Item, id: " + id);
-        //----> Delete the menu with the given id.
-        var response = menuService.deleteMenu(id);
-
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<?> editMenu(@PathVariable(name = "id") UUID id, @Valid @RequestBody MenuDto menuDto) {
-        System.out.println("Updating Menu Item, id: " + id);
-        //----> Update the menu with the given id.
-        var response = menuService.editMenu(id, menuDto);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
-
     @GetMapping
     public ResponseEntity<List<MenuDto>> findAllMenu() {
         //----> Retrieve all the menus.

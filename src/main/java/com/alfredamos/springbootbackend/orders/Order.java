@@ -79,7 +79,6 @@ public class Order {
 
         this.setIsDelivered(false);
         this.setIsShipped(false);
-        this.setOrderDetails(orderDetails);
 
 
         return this;

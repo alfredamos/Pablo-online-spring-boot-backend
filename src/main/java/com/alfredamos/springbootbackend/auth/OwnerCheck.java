@@ -15,22 +15,15 @@ import java.util.UUID;
 public class OwnerCheck {
     private final UserRepository userRepository;
 
-    public boolean compareAuthUserIdWithParamUserId(UUID userId){
+
+    public boolean userIdMatchesContextUserId(UUID userId){
         //----> Get the user id from security context.
         var idOfUser = getUserIdFromContext();
 
         //----> Compare the two user id for equality.
         return idOfUser.equals(userId);
-
     }
 
-    public boolean compareAuthUserIdWithUserIdOnOrder(UUID userIdFromOrder){
-        //----> Get the user id from security context.
-        var idOfUser = getUserIdFromContext();
-
-        //----> Compare the two user id for equality.
-        return idOfUser.equals(userIdFromOrder);
-    }
 
     public boolean isAdminUser(){
         //----> Check for admin role.

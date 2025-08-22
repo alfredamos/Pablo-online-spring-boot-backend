@@ -1,5 +1,6 @@
 package com.alfredamos.springbootbackend.users;
 
+import com.alfredamos.springbootbackend.exceptions.ForbiddenException;
 import com.alfredamos.springbootbackend.exceptions.NotFoundException;
 import com.alfredamos.springbootbackend.utils.ResponseMessage;
 import lombok.AllArgsConstructor;
@@ -17,8 +18,11 @@ public class UserService {
     private final UserMapper userMapperImpl;
 
     //----> Delete a resource with given id.
-    public ResponseMessage deleteUser(UUID id)  {
-        checkForOrderExistence(id); //----> Check for existence of user with the given id.
+    public ResponseMessage deleteUserById(UUID id, boolean canDeleteAndView)  {
+        //----> Check for ownership or admin privilege.
+        if (!canDeleteAndView) {
+            throw new ForbiddenException("You don't have permission to remove this order");
+        }
 
         //-----> Delete resource.
         userRepository.deleteById(id);
@@ -35,8 +39,11 @@ public class UserService {
     }
 
     //----> Get user by id.
-    public UserDto getUserById(UUID id)  {
-        checkForOrderExistence(id); //----> Check for existence of user with the given id.
+    public UserDto getUserById(UUID id, boolean canDeleteAndView)  {
+        //----> Check for ownership or admin privilege.
+        if (!canDeleteAndView) {
+            throw new ForbiddenException("You don't have permission to view this order");
+        }
 
         //----> Get the user by id.
         var user =  this.userRepository.findById(id).orElse(null);
@@ -46,25 +53,16 @@ public class UserService {
 
     //----> Get user by email.
     public User getUserByEmail(String email)  {
-        var exist = userRepository.existsUserByEmail(email);
+        //----> Get the user with the given email
+        var user = this.userRepository.findUserByEmail(email);
 
         //----> Check for existence of user.
-        if (!exist){
+        if (user == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist!");
         }
 
-        //----> Get the user by 1id.
-        return   this.userRepository.findUserByEmail(email);
-    }
-
-
-    private void checkForOrderExistence(UUID id){
-        var exist = this.userRepository.existsById(id);
-
-        //----> Check for existence of order.
-        if (!exist){
-            throw new NotFoundException("Order does not exist!");
-        }
+        //----> Send back response.
+        return user;
     }
 
 }

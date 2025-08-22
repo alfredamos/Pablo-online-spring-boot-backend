@@ -16,7 +16,7 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final UserRepository userRepository;
 
-    MenuDto createMenu(MenuDto menuDto) {
+    public MenuDto createMenu(MenuDto menuDto) {
         //----> get the user associated with the creation.
         var user = userRepository.findById(menuDto.getUserId()).orElseThrow(() -> new NotFoundException("User not found"));
 
@@ -32,7 +32,7 @@ public class MenuService {
         return menuDto;
     }
 
-    ResponseMessage deleteMenu(UUID id) {
+    public ResponseMessage deleteMenu(UUID id) {
         //----> Check for existence of menu to be deleted.
         var menu = getOneMenu(id);
 
@@ -43,7 +43,7 @@ public class MenuService {
 
     }
 
-    MenuDto editMenu(UUID id, MenuDto menuDto) {
+    public MenuDto editMenu(UUID id, MenuDto menuDto) {
         //----> Check for existence of menu to be edited.
         getOneMenu(id);
 
@@ -58,14 +58,14 @@ public class MenuService {
         return menuMapper.toDTO(menu);
     }
 
-    MenuDto getMenuById(UUID id){
+    public MenuDto getMenuById(UUID id){
         //----> Check for existence of menu to be fetched.
         var menu = getOneMenu(id);
 
         return menuMapper.toDTO(menu);
     }
 
-    List<MenuDto> getAllMenu(){
+    public List<MenuDto> getAllMenu(){
         //----> Get all the menus from the database.
         var menus = menuRepository.findAll();
 
