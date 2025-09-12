@@ -81,6 +81,7 @@ public class GlobalExceptionHandler {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorDetail);
         }
 
+        //----> Jwt signature exception
         if (ex instanceof SignatureException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), ex.getMessage());
             errorDetail.setProperty("description", "The JWT signature is invalid");
@@ -88,6 +89,7 @@ public class GlobalExceptionHandler {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorDetail);
         }
 
+        //----> Jwt expired exception.
         if (ex instanceof ExpiredJwtException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), ex.getMessage());
             errorDetail.setProperty("description", "The JWT token has expired");
@@ -95,6 +97,7 @@ public class GlobalExceptionHandler {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorDetail);
         }
 
+        //----> Bad request exception
         if (ex instanceof BadRequestException){
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400), ex.getMessage());
             errorDetail.setProperty("description", "Please provide all the necessary values.");
@@ -102,6 +105,7 @@ public class GlobalExceptionHandler {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetail);
         }
 
+        //----> Forbidden exception
         if (ex instanceof ForbiddenException){
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), ex.getMessage());
             errorDetail.setProperty("description", "You are not permitted to view, delete and edit this resource.");
@@ -109,6 +113,7 @@ public class GlobalExceptionHandler {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorDetail);
         }
 
+        //----> Not found exception.
         if (ex instanceof NotFoundException){
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(404), ex.getMessage());
             errorDetail.setProperty("description", "This resource is not available!");
@@ -116,6 +121,7 @@ public class GlobalExceptionHandler {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDetail);
         }
 
+        //----> UnAuthorized exception.
         if (ex instanceof UnAuthorizedException){
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), ex.getMessage());
             errorDetail.setProperty("description", "Invalid credentials!");
@@ -123,6 +129,7 @@ public class GlobalExceptionHandler {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorDetail);
         }
 
+        //----> Stripe payment exception.
         if (ex instanceof PaymentException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(500), ex.getMessage());
             errorDetail.setProperty("description", ex.getMessage());
@@ -130,6 +137,7 @@ public class GlobalExceptionHandler {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDetail);
         }
 
+        //----> Server error exception.
         if (ex instanceof ServerErrorException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(500), ex.getMessage());
             errorDetail.setProperty("description", "Unknown internal server error.");
