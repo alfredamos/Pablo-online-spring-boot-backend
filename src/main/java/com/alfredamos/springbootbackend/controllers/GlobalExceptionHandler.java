@@ -14,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.server.ServerErrorException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,10 +57,26 @@ public class GlobalExceptionHandler {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorDetail);
         }
 
+        //----> Authentication exception
+        if (ex instanceof AuthenticationException) {
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), ex.getMessage());
+            errorDetail.setProperty("description", "Invalid credentials");
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorDetail);
+        }
+
         //----> Access denial exception
         if (ex instanceof AccessDeniedException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), ex.getMessage());
             errorDetail.setProperty("description", "You are not authorized to access this resource");
+
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorDetail);
+        }
+
+        //----> Account status expiration.
+        if (ex instanceof InternalAuthenticationServiceException) {
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), "Internal authentication issues with login credentials!");
+            errorDetail.setProperty("description", "Invalid credentials");
 
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorDetail);
         }
