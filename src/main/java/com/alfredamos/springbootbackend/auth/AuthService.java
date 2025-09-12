@@ -106,6 +106,7 @@ public class AuthService {
         checkForCorrectPassword(password, user.getPassword());
 
         //----> save the change in profile into the database.
+        editProfileRequest.setPassword(user.getPassword());
         var userPayload = this.authMapper.toEntity(editProfileRequest);
         //var userPayload = this.getUserFromEditProfile(editProfile, user);
         userPayload.setId(user.getId());
