@@ -70,9 +70,7 @@ public class AuthService {
 
         token.setTokenType(TokenType.Bearer);
         token.setExpired(false);
-        token.setExpired(false);
-
-        System.out.println("token : " + token);
+        token.setRevoked(false);
 
         //----> save the new token in the database.
         tokenRepository.save(token);
@@ -167,22 +165,6 @@ public class AuthService {
 
         // Save username and hashedPassword to your database
         return new ResponseMessage("Success", "Signup is successful!", 201);
-    }
-
-    public void removeLoginAccess(HttpServletResponse response){
-        //----> Remove accessToken
-        var accessCookie = makeCookie(new CookieParameter(AuthParams.accessToken, null, 0, AuthParams.accessTokenPath));
-
-        //----> Add access-cookie to a response object.
-        response.addCookie(accessCookie);
-
-
-        //----> Remove refresh-cookie.
-        var refreshCookie = makeCookie(new CookieParameter(AuthParams.refreshToken, null, 0, AuthParams.refreshTokenPath));
-
-        //----> Add refresh-cookie to a response object.
-        response.addCookie(refreshCookie);
-
     }
 
     public UserDto getCurrentUser(){
