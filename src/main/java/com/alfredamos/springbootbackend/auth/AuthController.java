@@ -44,14 +44,6 @@ public class AuthController {
 
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<ResponseMessage> logout(HttpServletResponse response){
-        //----> Delete access-cookie
-        authService.removeLoginAccess(response);
-
-        return ResponseEntity.ok(new ResponseMessage("Success", "Logout successfully!", 200));
-    }
-
     @PostMapping("/refresh")
     public ResponseEntity<JwtResponse> refresh(@CookieValue(value = AuthParams.refreshToken) String refreshToken, HttpServletResponse response){
         var accessToken = this.authService.getRefreshToken(refreshToken, response); //----> Get access token.
