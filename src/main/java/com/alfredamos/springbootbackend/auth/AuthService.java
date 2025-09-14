@@ -248,13 +248,13 @@ public class AuthService {
     public void revokedAllUserTokens(User user){
         var validUserTokens = tokenRepository.findAllValidTokensByUser(user.getId());
 
-        if (!validUserTokens.isEmpty()){
-            validUserTokens.forEach(token -> {
-                token.setRevoked(true);
-                token.setRevoked(false);
-            });
-            tokenRepository.saveAll(validUserTokens);
-        }
+        if (validUserTokens.isEmpty()) return;
+        validUserTokens.forEach(token -> {
+            token.setExpired(true);
+            token.setRevoked(true);
+        });
+        tokenRepository.saveAll(validUserTokens);
+
 
     }
 
