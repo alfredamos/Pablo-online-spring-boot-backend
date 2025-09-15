@@ -64,7 +64,7 @@ public class AuthConfig {
                 }).logout(logout -> //SecurityContextHolder.clearContext();
                         logout // Configure logout
                                 .logoutUrl("/api/auth/logout")// The URL that triggers logout
-                                .addLogoutHandler(logoutService)
+                                .addLogoutHandler(logoutService::logout)
                                 .logoutSuccessHandler((request, response, authentication) -> {
                                     SecurityContextHolder.clearContext();
                                 })
